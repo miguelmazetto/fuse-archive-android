@@ -1,6 +1,6 @@
-PKG_CONFIG?=pkg-config
-pkgcflags=$(shell $(PKG_CONFIG) libarchive fuse --cflags)
-pkglibs=$(shell   $(PKG_CONFIG) libarchive fuse --libs)
+
+override LDFLAGS += -L$(JNIOUTDIR) -lfuse -pthread -larchive -lcrypto -lexpat -llzo2 -llzma -lzstd -llz4 -lcharset -lbz2 -lz
+override CXXFLAGS += -I$(LIBARCHIVE_INC) -I$(LIBFUSE_INC) -D_FILE_OFFSET_BITS=64 -static-libstdc++
 
 prefix=/usr
 bindir=$(prefix)/bin
@@ -24,4 +24,4 @@ out/fuse-archive: src/main.cc
 	mkdir -p out
 	$(CXX) $(CXXFLAGS) $(pkgcflags) $< $(LDFLAGS) $(pkglibs) -o $@
 
-.PHONY: all check clean install uninstall
+.PHONY: all check clean
